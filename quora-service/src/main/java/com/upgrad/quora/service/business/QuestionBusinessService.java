@@ -1,10 +1,9 @@
 package com.upgrad.quora.service.business;
 
 import com.upgrad.quora.service.dao.QuestionDao;
-import com.upgrad.quora.service.dao.UserDao;
+import com.upgrad.quora.service.dao.UserAuthTokenDao;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
-import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,13 +22,13 @@ public class QuestionBusinessService {
     private QuestionDao questionDao;
 
     @Autowired
-    private UserDao userDao;
+    private UserAuthTokenDao userAuthTokenDao;
+
 
 
     public UserAuthTokenEntity getUserAuthToken(final String authorizationToken) {
-        if (authorizationToken != null && !authorizationToken.isEmpty() && authorizationToken.split("Bearer").length > 1) {
-            String bearerToken = authorizationToken.split("Bearer ")[1];
-            return userDao.getAuthToken(bearerToken);
+        if (authorizationToken != null && !authorizationToken.isEmpty() ) {
+            return userAuthTokenDao.getAuthToken(authorizationToken);
         } else {
             return null;
         }
@@ -49,6 +48,10 @@ public class QuestionBusinessService {
     @Transactional(propagation = Propagation.REQUIRED)
     public QuestionEntity createQuestion(QuestionEntity questionEntity) {
         return questionDao.createQuestion(questionEntity);
+    }
+
+    public List<QuestionEntity> getAllQuestions() {
+        return questionDao.getAllQuestions();
     }
 
 }

@@ -55,4 +55,29 @@ public class QuestionController {
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/question/all",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestions(@RequestHeader("authorization") final String authorizationToken) throws AuthorizationFailedException {
+        List<QuestionDetailsResponse> questionDetailsResponseList = new ArrayList<QuestionDetailsResponse>();
+        UserAuthTokenEntity userAuthTokenEntity = questionBusinessService.getUserAuthToken(authorizationToken);
+        if (userAuthTokenEntity != null) {
+            if (questionBusinessService.isUserSignedIn(userAuthTokenEntity)) {
+                List<QuestionEntity> questionEntityList = new ArrayList<QuestionEntity>();
+                questionEntityList = questionBusinessService.getAllQuestions();
+                if (questionEntityList != null && !questionEntityList.isEmpty()) {
+                    for (QuestionEntity qEntity : questionEntityList) {
+                        questionDetailsResponseList.add(new QuestionDetailsResponse().id(qEntity.getUuid()).content(qEntity.getContent()));
+                    }
+                }
+
+            } else {
+                throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get all questions");
+            }
+        } else {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+        return new ResponseEntity<List<QuestionDetailsResponse>>(questionDetailsResponseList, HttpStatus.OK);
+
+    }
+
 }

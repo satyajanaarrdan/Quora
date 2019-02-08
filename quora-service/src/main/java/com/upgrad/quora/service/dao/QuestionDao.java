@@ -20,4 +20,12 @@ public class QuestionDao {
         return questionEntity;
     }
 
+    public List<QuestionEntity> getAllQuestions() {
+        try {
+            return entityManager.createNamedQuery("getAllQuestions", QuestionEntity.class).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
 }
