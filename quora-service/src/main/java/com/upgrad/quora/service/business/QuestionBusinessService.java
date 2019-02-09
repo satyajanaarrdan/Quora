@@ -4,6 +4,7 @@ import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.dao.UserAuthTokenDao;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
+import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,8 +16,6 @@ import java.util.List;
 @Service
 public class QuestionBusinessService {
 
-    @Autowired
-    private UserBusinessService userBusinessService;
 
     @Autowired
     private QuestionDao questionDao;
@@ -54,4 +53,23 @@ public class QuestionBusinessService {
         return questionDao.getAllQuestions();
     }
 
+    public QuestionEntity getUserForQuestionId(String uuid) {
+        return questionDao.getUserForQuestionId(uuid);
+    }
+
+    public boolean isUserQuestionOwner(UserEntity user, UserEntity questionOwner) {
+        boolean isUserQuestionOwner = false;
+        if (user != null && questionOwner != null && user.getUuid() != null && !user.getUuid().isEmpty()
+                && questionOwner.getUuid() != null && !questionOwner.getUuid().isEmpty()) {
+            if (user.getUuid().equals(questionOwner.getUuid())) {
+                isUserQuestionOwner = true;
+            }
+        }
+        return isUserQuestionOwner;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateQuestion(QuestionEntity questionEntity) {
+        questionDao.updateQuestion(questionEntity);
+    }
 }
