@@ -57,7 +57,7 @@ public class QuestionBusinessService {
         return questionDao.getUserForQuestionId(uuid);
     }
 
-    public boolean isUserQuestionOwner(UserEntity user, UserEntity questionOwner) {
+     public boolean isUserQuestionOwner(UserEntity user, UserEntity questionOwner) {
         boolean isUserQuestionOwner = false;
         if (user != null && questionOwner != null && user.getUuid() != null && !user.getUuid().isEmpty()
                 && questionOwner.getUuid() != null && !questionOwner.getUuid().isEmpty()) {

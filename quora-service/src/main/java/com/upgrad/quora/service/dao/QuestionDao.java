@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public class QuestionDao {
 
+
     @Autowired
     EntityManager entityManager;
 
