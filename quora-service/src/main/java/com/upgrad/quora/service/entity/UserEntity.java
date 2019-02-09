@@ -90,7 +90,8 @@ public class UserEntity implements Serializable {
     private String dob;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+
     private List<QuestionEntity> questions;
 
 
@@ -98,7 +99,7 @@ public class UserEntity implements Serializable {
     private List<AnswerEntity> answers;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<UserAuthTokenEntity> userAuthTokens;
 
 
